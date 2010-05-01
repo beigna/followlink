@@ -1,14 +1,15 @@
 <?
 require('./lib/Tyrant.php');
-require('./lib/functions.php');
 require('./lib/captcha.php');
+require('./lib/followlink.php');
 session_start();
 
 if ($_POST['captcha_follow'])
 {
     if ($_POST['captcha_follow'] == $_SESSION['captcha_follow'])
     {
-        $data = get_url($_GET['k']);
+        $fl = new FollowLink();
+        $data = $fl->get($_GET['k']);
 
         unset($_SESSION['captcha_follow']);
         header('Location: '.$data['url']);
@@ -38,7 +39,9 @@ else if ($_POST['url'])
 {
     if ($_POST['captcha_create'] == $_SESSION['captcha_create'])
     {
-        $key = save_url($_POST['url']);
+        $fl = new FollowLink();
+        $fl->create($_POST['url']);
+        $key = $fl->get_key();
 
         if (!$_SESSION['urls']) {$_SESSION['urls'] = array();}
 
@@ -96,7 +99,7 @@ else
     <title>FollorLink - Tus enlaces, seguros.</title>
   </head>
   <body>
-    <h1>FollowLink &gt; &gt; &gt;</h1>
+    <h1><a href="<? echo 'http://'.$_SERVER['HTTP_HOST'].str_replace('index.php', '', $_SERVER['PHP_SELF']); ?>">FollowLink</a> &gt; &gt; &gt;</h1>
     <h2>Dej&aacute; que s&oacute;lo los humanos puedan descargar tus links ;)</h2>
 
     <p>FollowLink permite que tus enlaces sean accesibles mediante un CAPTCHA, de modo que bots no puedan hacer hotlinks o descargas abusivas de tus contenidos ;)</p>
