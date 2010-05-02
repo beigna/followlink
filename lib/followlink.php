@@ -38,19 +38,32 @@ class FollowLink
         $this->data['last_hit'] = gmdate('Y-m-d H:i:s', time());
     }
 
+    private function url_is_valid($url)
+    {
+        $regex = '(([a-zA-Z][0-9a-zA-Z+\\-\\.]*:)?/{0,2}[0-9a-zA-Z;/?:@&=+$\\.\\-_!~*\'()%]+)?(#[0-9a-zA-Z;/?:@&=+$\\.\\-_!~*\'()%]+)';
+
+        if (eregi($url, $regex))
+        {
+            return true;
+        }
+        return false;
+    }
+
     public function create($url)
     {
-        $this->generate_unique_key();
+        if ($this->url_is_valid($url))
+        {
+            $this->generate_unique_key();
+            $this->data = Array(
+                'url' => $url,
+                'created_at' => gmdate('Y-m-d H:i:s', time()),
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'hits' => 0,
+                'last_hit' => '1984-09-28 06:50:00',
+            );
 
-        $this->data = Array(
-            'url' => $url,
-            'created_at' => gmdate('Y-m-d H:i:s', time()),
-            'ip' => $_SERVER['REMOTE_ADDR'],
-            'hits' => 0,
-            'last_hit' => '1984-09-28 06:50:00',
-        );
-
-        $this->save_data();
+            $this->save_data();
+        }
     }
 
     public function get($key)
