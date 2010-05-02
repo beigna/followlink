@@ -43,13 +43,16 @@ else if ($_POST['url'])
         $fl->create($_POST['url']);
         $key = $fl->get_key();
 
-        if (!$_SESSION['urls']) {$_SESSION['urls'] = array();}
+        if ($key)
+        {
+            if (!$_SESSION['urls']) {$_SESSION['urls'] = array();}
 
-        array_push($_SESSION['urls'], 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?k='.$key);
+            array_push($_SESSION['urls'], 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?k='.$key);
 
-        unset($_SESSION['captcha_create']);
-        header('Location: http://'.$_SERVER['HTTP_HOST'].str_replace('index.php', '', $_SERVER['PHP_SELF']));
-        exit;
+            unset($_SESSION['captcha_create']);
+            header('Location: http://'.$_SERVER['HTTP_HOST'].str_replace('index.php', '', $_SERVER['PHP_SELF']));
+            exit;
+        }
     }
 
     $_SESSION['posted_url'] = $_POST['url'];

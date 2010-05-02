@@ -40,9 +40,9 @@ class FollowLink
 
     private function url_is_valid($url)
     {
-        $regex = '(([a-zA-Z][0-9a-zA-Z+\\-\\.]*:)?/{0,2}[0-9a-zA-Z;/?:@&=+$\\.\\-_!~*\'()%]+)?(#[0-9a-zA-Z;/?:@&=+$\\.\\-_!~*\'()%]+)';
+        $regex = '/^(https?|ftp):\/\/[A-Za-z0-9\-_]+\\.+[A-Za-z0-9\.\/%&#=\?\-_]+$/i';
 
-        if (eregi($url, $regex))
+        if (preg_match($regex, $url))
         {
             return true;
         }
