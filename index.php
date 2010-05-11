@@ -3,6 +3,7 @@ require_once('./lib/Tyrant.php');
 require_once('./lib/captcha.php');
 require_once('./lib/followlink.php');
 require_once('./lib/http.php');
+require_once('./lib/mysql.php');
 
 session_start();
 
@@ -10,11 +11,13 @@ if ($_POST['captcha_follow'])
 {
     if ($_POST['captcha_follow'] == $_SESSION['captcha_follow'])
     {
-        $fl = new FollowLink();
-        $data = $fl->get($_GET['k'], 1);
+        $fl = new FollowLink($db_conn);
+        $fl->get($_GET['k']);
+        $fl->compute_hit();
+        $fl->save();
 
         unset($_SESSION['captcha_follow']);
-        header('Location: '.$data['url']);
+        header('Location: '.$fl->url);
         exit;
     }
 
@@ -27,24 +30,31 @@ else if ($_GET['k'])
 {
     if (!$_SESSION['captcha_follow']){$_SESSION['captcha_follow'] = captcha_text();}
 
-    $fl = new FollowLink();
-    $data = $fl->get($_GET['k']);
-
     $captcha_form = '
+<h3>Seguir FollowLink</h3>
+<h4>El enlace solicitado no existe.</h4>
+<p>Esto se puede a deber a que copi&oacute; mal la URL o la misma ha sido retirada.</p>
+<p>Disculpe las molestias.</p>
+    ';
+
+    $fl = new FollowLink($db_conn);
+    if ($fl->get($_GET['k']))
+    {
+        $captcha_form = '
 <h3>Seguir FollowLink</h3>
 
 <table border="1">
   <tr>
     <th>Archivo</th>
-    <td>'.$data['file_name'].'</td>
+    <td>'.$fl->file_name.'</td>
   </tr>
   <tr>
     <th>Tipo</th>
-    <td>'.$data['content_type'].'</td>
+    <td>'.$fl->content_type.'</td>
   </tr>
   <tr>
     <th>Tama&ntilde;o</th>
-    <td>'.round(($data['file_size']/1024/1024), 3).' MiB</td>
+    <td>'.round(($fl->file_size/1024/1024), 3).' MiB</td>
   </tr>
 </table>
 
@@ -53,16 +63,18 @@ else if ($_GET['k'])
   <input type="text" size="6" name="captcha_follow" value="" />
   <input type="submit" name="continue" value="Continuar" />
 </form>
-    ';
+        ';
+    }
 }
 
 else if ($_POST['url'])
 {
     if ($_POST['captcha_create'] == $_SESSION['captcha_create'])
     {
-        $fl = new FollowLink();
-        $fl->create($_POST['url']);
-        $key = $fl->get_key();
+        $fl = new FollowLink($db_conn);
+        $fl->set_url_info($_POST['url']);
+        $fl->save();
+        $key = $fl->id;
 
         if ($key)
         {
