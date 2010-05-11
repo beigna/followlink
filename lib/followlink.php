@@ -53,9 +53,14 @@ class FollowLink
     {
         if ($this->url_is_valid($url))
         {
+            $url_info = get_http_headers($url);
+
             $this->generate_unique_key();
             $this->data = Array(
                 'url' => $url,
+                'file_name' => $url_info['filename'],
+                'content_type' => $url_info['Content-Type'],
+                'file_size' => $url_info['Content-Length'],
                 'created_at' => gmdate('Y-m-d H:i:s', time()),
                 'ip' => $_SERVER['REMOTE_ADDR'],
                 'hits' => 0,
@@ -66,13 +71,17 @@ class FollowLink
         }
     }
 
-    public function get($key)
+    public function get($key, $stats=0)
     {
         $this->key = $key;
 
         $this->read_data();
-        $this->compute_hit();
-        $this->save_data();
+
+        if ($stats == 1)
+        {
+            $this->compute_hit();
+            $this->save_data();
+        }
 
         return $this->data;
     }
