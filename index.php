@@ -1,7 +1,9 @@
 <?
-require('./lib/Tyrant.php');
-require('./lib/captcha.php');
-require('./lib/followlink.php');
+require_once('./lib/Tyrant.php');
+require_once('./lib/captcha.php');
+require_once('./lib/followlink.php');
+require_once('./lib/http.php');
+
 session_start();
 
 if ($_POST['captcha_follow'])
@@ -9,7 +11,7 @@ if ($_POST['captcha_follow'])
     if ($_POST['captcha_follow'] == $_SESSION['captcha_follow'])
     {
         $fl = new FollowLink();
-        $data = $fl->get($_GET['k']);
+        $data = $fl->get($_GET['k'], 1);
 
         unset($_SESSION['captcha_follow']);
         header('Location: '.$data['url']);
@@ -25,8 +27,27 @@ else if ($_GET['k'])
 {
     if (!$_SESSION['captcha_follow']){$_SESSION['captcha_follow'] = captcha_text();}
 
+    $fl = new FollowLink();
+    $data = $fl->get($_GET['k']);
+
     $captcha_form = '
 <h3>Seguir FollowLink</h3>
+
+<table border="1">
+  <tr>
+    <th>Archivo</th>
+    <td>'.$data['file_name'].'</td>
+  </tr>
+  <tr>
+    <th>Tipo</th>
+    <td>'.$data['content_type'].'</td>
+  </tr>
+  <tr>
+    <th>Tama&ntilde;o</th>
+    <td>'.round(($data['file_size']/1024/1024), 3).' MiB</td>
+  </tr>
+</table>
+
 <img src="media/img.php?t=f" />
 <form method="post">
   <input type="text" size="6" name="captcha_follow" value="" />
@@ -74,7 +95,7 @@ else
     }
 
     $create_form = '
-<h3>Crear FollorLink</h3>
+<h3>Crear FollowLink</h3>
 <img src="media/img.php?t=c" />
 <form method="post">
   <input type="text" size="6" name="captcha_create" />
@@ -99,7 +120,7 @@ else
 
 <html>
   <head>
-    <title>FollorLink - Tus enlaces, seguros.</title>
+    <title>FollowLink - Tus enlaces, seguros.</title>
   </head>
   <body>
     <h1><a href="<? echo 'http://'.$_SERVER['HTTP_HOST'].str_replace('index.php', '', $_SERVER['PHP_SELF']); ?>">FollowLink</a> &gt; &gt; &gt;</h1>
