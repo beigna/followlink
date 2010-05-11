@@ -25,7 +25,14 @@ function get_http_headers($url)
         if (strpos($line, ':') !== false)
         {
             $tmp = explode(':', $line);
-            $data[trim($tmp[0])] = trim($tmp[1]);
+            $key = trim($tmp[0]);
+
+            $tmp = $tmp[1];
+            $tmp = explode(';', $tmp);
+            $value = trim($tmp[0]);
+
+
+            $data[$key] = $value;
         }
     }
 
