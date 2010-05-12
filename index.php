@@ -1,5 +1,4 @@
 <?
-require_once('./lib/Tyrant.php');
 require_once('./lib/captcha.php');
 require_once('./lib/followlink.php');
 require_once('./lib/http.php');

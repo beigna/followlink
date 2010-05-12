@@ -31,7 +31,6 @@ function get_http_headers($url)
             $tmp = explode(';', $tmp);
             $value = trim($tmp[0]);
 
-
             $data[$key] = $value;
         }
     }
