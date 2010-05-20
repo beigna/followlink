@@ -1,0 +1,24 @@
+{if:key_exists}
+<h3>Seguir FollowLink</h3>
+
+<table border="1">
+  <tr>
+    <th>Archivo</th>
+    <td>{file_name}</td>
+  </tr>
+  <tr>
+    <th>Tipo</th>
+    <td>{content_type}</td>
+  </tr>
+  <tr>
+    <th>Tama&ntilde;o</th>
+    <td>{file_size} MiB</td>
+  </tr>
+</table>
+
+<form method="post">
+  <img src="media/img.php?t=f" />
+  <input type="text" size="6" name="captcha_follow" value="" />
+  <input type="submit" name="continue" value="Continuar" />
+</form>
+{end}

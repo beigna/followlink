@@ -1,0 +1,18 @@
+<h3>Crear FollowLink</h3>
+
+<form method="post">
+  <img src="media/img.php?t=c" />
+  <input type="text" size="6" name="captcha_create" />
+  <input type="text" size="50" name="url" value="{previous_url}" />
+  <input type="submit" name="save" value="Guardar" />
+</form>
+
+{if:links}
+<h3>Tus FollowLinks</h3>
+
+  <ul>
+  {foreach:links,link}
+    <li><input type="text" size="50" value="{link}" /></li>
+  {end}
+  </ul>
+{end}

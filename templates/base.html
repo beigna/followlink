@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>FollowLink - Tus enlaces, seguros.</title>
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">
+        <h1><a href="{home_url}">FollowLink</a> &gt; &gt; &gt;</h1>
+        <h2>Dej&aacute; que s&oacute;lo los humanos puedan descargar tus links ;)</h2>
+      </div>
+      {if:messages}
+      <div id="messages">
+        <ul>
+        {foreach:messages,message}
+          <li>{message['type']} - {message['text']}</li>
+        {end}
+        </ul>
+      </div>
+      {end}
+      <div id="tutorial">
+      <p>FollowLink permite que tus enlaces sean accesibles mediante un CAPTCHA, de modo que bots no puedan hacer hotlinks o descargas abusivas de tus contenidos ;)</p>
+          <p>&iquest;C&oacute;mo funciona?
+            <ol>
+              <li>Carg&aacute; tu enlace.</li>
+              <li>Obten&eacute; una URL alternativa.</li>
+              <li>Public&aacute; la URL alternativa en Blogs, Foros y donde quieras.</li>
+            </ol>
+          </p>
+      </div>
+      <div id="content">{content}</div>
+      <div id="footer">&copy; 2010</div>
+    </div>
+    <script type="text/javascript" src="/media/js/analytics.js"></script>
+  </body>
+</html>
