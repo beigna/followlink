@@ -21,6 +21,10 @@ Contributors
 
 * Ignacio Juan Martín Benedetti <tranceway@gmail.com>
 
+Credits
+-------
+* vemplator, by Alan Szlosek <alan.szlosek@gmail.com>
+
 License
 -------
 
