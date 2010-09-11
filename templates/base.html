@@ -10,18 +10,17 @@
         <h2>Dej&aacute; que s&oacute;lo los humanos puedan descargar tus links ;)</h2>
         <p>FollowLink permite que tus enlaces sean accesibles mediante un CAPTCHA, de modo que bots no puedan hacer hotlinks o descargas abusivas de tus contenidos ;)</p>
       </div>
-      {if:messages}
+      {% if messages %}
       <div id="messages">
         <ul>
-        {foreach:messages,message}
-          <li class="{message['type']}">{message['text']}</li>
-        {end}
+        {% for message in messages %}
+          <li class="{message['type']}">{{ message }}</li>
+        {% endfor %}
         </ul>
       </div>
-      {end}
-      <div id="content">{content}</div>
+      {% endif %}
+      <div id="content">{% block content %}{% endblock %}</div>
       <div id="footer">&copy; 2010</div>
     </div>
-    <script type="text/javascript" src="/media/js/analytics.js"></script>
   </body>
 </html>
