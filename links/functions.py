@@ -11,15 +11,13 @@ def random_pk(length=8):
     return s[f:t]
 
 def get_url_info(url):
-    print url
     req = BasicHttp(url)
-    print req
     res = req.HEAD()
 
     data = {
         'file_name': url.split('/')[-1],
-        'content_type': res['headers']['Content-Type'],
-        'file_size': res['headers']['Content-Length']
+        'content_type': res['header']['Content-Type'],
+        'file_size': res['header']['Content-Length']
     }
 
     return data
