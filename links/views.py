@@ -14,17 +14,26 @@ from links.forms import LinkAddForm, LinkFollowForm
 # Create your views here.
 
 def follow(request, id):
-    if not request.session.get('captcha_add', False):
-        request.session['captcha_add'] = Captcha.random_text()
+    if not request.session.get('captcha_follow', False):
+        request.session['captcha_follow'] = Captcha.random_text()
 
     link = get_object_or_404(Link, pk=id)
 
     if request.method == 'GET':
-        form = LinkFollowForm('')
+        form = LinkFollowForm(request.session['captcha_follow'])
 
     elif request.method == 'POST':
+        print 'HICE POST'
 
-    return render_to_response('home.html',
+        form = LinkFollowForm(request.session['captcha_follow'],
+            data=request.POST)
+
+        if form.is_valid():
+            print 'HICE VALIDO'
+
+        print 'HICE FRUTA'
+
+    return render_to_response('follow.html',
         {
             'link_form': form,
             'link': link

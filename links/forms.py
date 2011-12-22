@@ -24,6 +24,15 @@ class LinkAddForm(forms.ModelForm):
         return self.cleaned_data
 
 class LinkFollowForm(forms.Form):
+    def __init__(self, captcha_text, *args, **kwargs):
+        self._captcha_follow = captcha_text
+        super(LinkFollowForm, self).__init__(*args, **kwargs)
+
     captcha_image = forms.CharField(widget=CaptchaWidget)
     captcha_text = forms.CharField()
 
+    def clean(self):
+        if self.cleaned_data.get('captcha_text') != self._captcha_follow:
+            raise forms.ValidationError('The captcha text do not match with image text.')
+
+        return self.cleaned_data
